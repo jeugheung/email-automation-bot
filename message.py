@@ -4,13 +4,13 @@ import email
 from email.utils import getaddresses
 
 fromFolder = "Item2"
-sender = ""
+sender = "naisen04@gmail.com"
 subject1 = "1"
 subject = subject1.encode('utf-8')
 toFolder = "New111"
 
 filePath = "C:/Users/Andrey/Desktop"
-fileName = ""
+fileName = "File.txt"
 
 searchMethod = 2
 # 1 - Search by Subject
@@ -23,7 +23,7 @@ class Imap:
         self.email = email
         self.password = password
 
-    def connectGmail(self):
+    def connectImap(self):
         self.imapServer = imaplib.IMAP4_SSL("imap.gmail.com", 993)  # server to connect to
         print("Connecting to mailbox...")
         self.imapServer.login(self.email, self.password)
@@ -100,8 +100,9 @@ class Save(Imap):
 
     def parseEmail(self):
         result, data = self.searchGmail(searchMethod, sender, subject, fromFolder)
-        print(result, data)
         if result == "OK":
+            file = os.path.join(filePath, fileName)
+            outFile = open(file, 'w')
             for num in data[0].split():
                 result, data = self.imapServer.uid('fetch', num, '(RFC822)')
                 raw_email = data[0][1]
@@ -111,23 +112,17 @@ class Save(Imap):
                 valueTo = email_message['To']
                 valueFrom = my_tuple[1]
                 valueDate = email_message['Date']
-
                 msgBody = ('From: ' + valueFrom + '\n' + 'To: ' + valueTo + '\n' + 'Date: ' + valueDate)
+                outFile.write(msgBody + '\n')
 
+            outFile.close()
 
-                file = os.path.join(filePath, fileName)
-                outFile = open(file, 'w')
-                outFile.write(msgBody)
-                outFile.close()
-
-
-                print("Email saving")
 
 
 
 example = Imap()
 
-#example.connectGmail()
+#example.connectImap()
 #example.searchGmail(searchMethod, sender, subject, fromFolder)
 #example.moveLetter(toFolder)
 #example.moveToStarred()
@@ -135,7 +130,7 @@ example = Imap()
 #example.mask_an_email(markRead=True)
 
 saving = Save()
-saving.connectGmail()
+saving.connectImap()
 saving.searchGmail(searchMethod, sender, subject, fromFolder)
 saving.parseEmail()
 
