@@ -3,19 +3,15 @@ import os
 import email
 from email.utils import getaddresses
 
+# MARK: - Imap Variables
 fromFolder = "Item2"
 sender = "naisen04@gmail.com"
 subject1 = "1"
 subject = subject1.encode('utf-8')
 toFolder = "New111"
-
 filePath = "C:/Users/Andrey/Desktop"
 fileName = "File.txt"
-
-searchMethod = 2
-# 1 - Search by Subject
-# 2 - Search by Sender
-# 3 - ALL folder
+searchMethod = 2  # 1 - Search by Subject, 2 - Search by Sender, 3 - ALL folder
 
 class Imap:
 
@@ -117,20 +113,8 @@ class Save(Imap):
 
             outFile.close()
 
+# MARK: - Imap Methods
+messages = Imap(email, password)
 
-
-
-example = Imap()
-
-#example.connectImap()
-#example.searchGmail(searchMethod, sender, subject, fromFolder)
-#example.moveLetter(toFolder)
-#example.moveToStarred()
-#example.deleteLetter()
-#example.mask_an_email(markRead=True)
-
-saving = Save()
-saving.connectImap()
-saving.searchGmail(searchMethod, sender, subject, fromFolder)
-saving.parseEmail()
-
+#MARK: - Save Methods
+saving = Save(email, password)

@@ -2,11 +2,11 @@ from smtplib import SMTP_SSL, SMTP_SSL_PORT
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
+# MARK: - Smtp Variables
 message = "Say Hello to new iPhone"
 fromEmail = "akartsight@gmail.com"
 toEmails = "naisen04@gmail.com"
 emailSubject = "Apple WWDC 2021"
-
 
 class Smtp:
 
@@ -30,8 +30,5 @@ class Smtp:
         self.smtpServer.sendmail(msg['From'], msg['To'], msg.as_string())
         self.smtpServer.quit()
 
-sending = Smtp()
-sending.connectSmtp()
-sending.sendMail(fromEmail, toEmails, emailSubject, message)
-
-
+# MARK: - Smtp Methods
+sending = Smtp(email, password)

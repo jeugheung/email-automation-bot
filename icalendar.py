@@ -5,25 +5,28 @@ from email.mime.text import MIMEText
 from email.utils import formatdate
 from email import encoders
 import os,datetime
-#COMMASPACE = ', '
 
-CRLF = "\r\n"
-login = ""
-password = ""
+# MARK: - Calendar Variables
+startMeeting = "20210713T183000"
+endMeeting = "20210714T223000"
 attendees = ["naisen04@gmail.com", "akart.dev@gmail.com", "avpishka@gmail.com"]
-organizer = "ORGANIZER;CN=Organizer:mailto:akartsight@gmail.com"
-
 fro = "Andrey Kim <akartsight@gmail.com>"
+meetingSubject = "Say Hello to new iMac"
 
 class Calendar():
 
-    def sendMeeting(self, login, password, CRLF, attendees, fro):
+    def __init__(self, email, password):
+        self.email = email
+        self.password = password
 
+    def sendMeeting(self, attendees, fro, startMeeting, endMeeting, meetingSubject):
+        CRLF = "\r\n"
         dtstamp = datetime.datetime.now().strftime("%Y%m%dT%H%M")
 
-        dtstart = "20210713T183000"
-        dtend = "20210713T223000"
+        dtstart = startMeeting
+        dtend = endMeeting
 
+        organizer = "ORGANIZER;CN=Organizer:mailto:akartsight@gmail.com"
 
         print(dtstart)
         print(dtend)
@@ -39,12 +42,12 @@ class Calendar():
         ical += attendee + "CREATED:" + dtstamp + CRLF + description + "LAST-MODIFIED:" + dtstamp + CRLF + "LOCATION:" + CRLF + "SEQUENCE:0" + CRLF + "STATUS:CONFIRMED" + CRLF
         ical += "SUMMARY:Meeting " + CRLF + "TRANSP:OPAQUE" + CRLF + "END:VEVENT" + CRLF + "END:VCALENDAR" + CRLF
 
-        eml_body = "by iOS DeV"
+        eml_body = "Meeting invitation"
 
         msg = MIMEMultipart('mixed')
         msg['Reply-To'] = fro
         msg['Date'] = formatdate(localtime=True)
-        msg['Subject'] = "Apple WWDC 2013"
+        msg['Subject'] = meetingSubject
         msg['From'] = fro
         msg['To'] = ",".join(attendees)
 
@@ -70,10 +73,10 @@ class Calendar():
         mailServer.ehlo()
         mailServer.starttls()
         mailServer.ehlo()
-        mailServer.login(login, password)
+        mailServer.login(self.email, self.password)
         mailServer.sendmail(fro, attendees, msg.as_string())
         mailServer.close()
         print("Sendeed")
 
-calendar = Calendar()
-calendar.sendMeeting(login, password, CRLF, attendees, fro)
+# MARK: - Calendar Methods
+calendar = Calendar(email, password)
